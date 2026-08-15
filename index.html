@@ -311,7 +311,12 @@ body.rv-fit .rv .txt{-webkit-line-clamp:3}
 
 /* ---------- 왜 ---------- */
 .whys{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s4)}
-.wy{background:var(--bg);border-radius:var(--r2);padding:var(--s5);position:relative}
+.wy{background:var(--bg);border-radius:var(--r2);padding:var(--s5);position:relative;
+  transition:background .18s ease,box-shadow .18s ease}
+/* 04 에만 고정으로 초록을 깔던 것 폐기. 넷 중 하나만 칠할 근거가 없었다.
+   마우스를 올린 카드만 살아나게 한다 */
+.wy:hover{background:var(--brand-bg);box-shadow:inset 0 0 0 1px var(--brand-line)}
+.wy:hover .no{color:var(--brand-deep)}
 .wy .no{display:block;color:var(--brand);font-size:var(--t6);font-weight:800;letter-spacing:.1em}
 .wy h3{margin-top:var(--s2);font-size:var(--t3);font-weight:800;letter-spacing:-.02em;line-height:1.4}
 .wy p{margin-top:var(--s3);color:var(--muted);font-size:var(--t5);line-height:1.75}
@@ -320,10 +325,10 @@ body.rv-fit .rv .txt{-webkit-line-clamp:3}
 .wy .kv li{font-size:var(--t6);font-weight:700;color:var(--ink-2);
   padding:0 var(--s3);border-left:1px solid var(--line)}
 .wy .kv li:first-child{padding-left:0;border-left:0}
-.wy.hi{background:var(--brand);color:#fff}
-.wy.hi .no{color:rgba(255,255,255,.72)}
-.wy.hi p{color:rgba(255,255,255,.84)}
-.wy.hi .kv li{color:rgba(255,255,255,.9);border-left-color:rgba(255,255,255,.26)}
+
+
+
+
 
 /* ---------- 특가 ---------- */
 .sales{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s5)}
@@ -366,11 +371,17 @@ body.rv-fit .rv .txt{-webkit-line-clamp:3}
    글자 네 줄만 있으면 페이지에서 제일 빈 화면이 된다. 번호 배지로 무게를 준다 */
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s5)}
 .st{padding-top:var(--s5);border-top:2px solid var(--line)}
-.st.on{border-top-color:var(--brand)}
+/* 01 에만 고정으로 색을 주던 규칙 폐기(2026-08-15).
+   넷 다 같은 단계인데 하나만 칠해두면 왜 저것만 다른지 설명이 안 된다.
+   대신 마우스를 올린 단계가 켜지게 했다. 손가락으로 짚어가며 읽는 동작과 같다 */
+.st{transition:border-color .18s ease}
+.st .sno{transition:background .18s ease,color .18s ease}
+.st:hover{border-top-color:var(--brand)}
+.st:hover .sno{background:var(--brand);color:#fff}
 .st .sno{display:inline-flex;align-items:center;justify-content:center;
   width:32px;height:32px;border-radius:var(--r3);margin-bottom:var(--s3);
   background:var(--brand-bg);color:var(--brand-deep);font-size:var(--t6);font-weight:800}
-.st.on .sno{background:var(--brand);color:#fff}
+
 .st h3{font-size:var(--t3);font-weight:800;letter-spacing:-.02em}
 .st .sd{display:block;margin-top:var(--s2);color:var(--muted);font-size:var(--t5)}
 
@@ -465,11 +476,11 @@ body.rv-fit .rv .txt{-webkit-line-clamp:3}
 .final{position:relative;isolation:isolate;overflow:hidden;
   background:var(--dark);color:#fff;padding:var(--s8) 0;text-align:center}
 .final:before{content:'';position:absolute;inset:0;z-index:-1;
-  background-image:var(--fbg);background-size:cover;background-position:50% 46%;opacity:.9}
+  background-image:var(--fbg);background-size:cover;background-position:50% 46%;opacity:1}
 /* 글자 뒤만 눌러준다. 전체를 덮으면 차가 아예 안 보여서 배경을 넣은 의미가 없다 */
 .final:after{content:'';position:absolute;inset:0;z-index:-1;
-  background:radial-gradient(ellipse 62% 58% at 50% 46%,rgba(11,26,32,.82) 0%,
-    rgba(11,26,32,.5) 62%,rgba(11,26,32,.28) 100%)}
+  background:radial-gradient(ellipse 46% 44% at 50% 46%,rgba(11,26,32,.78) 0%,
+    rgba(11,26,32,.34) 66%,rgba(11,26,32,.06) 100%)}
 .final h2{font-size:var(--t2);font-weight:800;letter-spacing:-.03em;line-height:1.35}
 .final h2 b{color:#fff;font-weight:800}
 .final p{margin-top:var(--s4);color:rgba(255,255,255,.76);font-size:var(--t4)}
@@ -769,7 +780,7 @@ table.pv td{padding:var(--s2) 0;color:var(--ink-2);line-height:1.7}
       차량과 관련된 모든 영역을 한 곳에서 해결해 드립니다.</p>
     <p class="quote">“정직한 계약은 사람을 남긴다”<br>
       <span>이 한 문장이 지금까지 제가 일해온 방식이자, 앞으로도 변하지 않을 원칙입니다.</span></p>
-    <div class="signbox"><span class="slot"></span><em>친필 사인</em><p class="signask">친필 사인을 보내주시면 이 자리에 들어갑니다.<br>A4 흰 종이에 검은 사인펜으로 크게 한 번 쓰신 뒤, 정면에서 그림자 없이 찍어 보내주세요.</p></div>
+    <div class="signbox"><span class="slot"></span><em>친필 사인</em><p class="signask">친필 사인을 보내주시면 이 자리에 들어갑니다.</p></div>
   </div>
 </div></section>
 
@@ -868,7 +879,7 @@ table.pv td{padding:var(--s2) 0;color:var(--ink-2);line-height:1.7}
   <div class="sec-h"><h2>문의부터 출고까지</h2>
     <p>문의 남기시면 당일에 연락드립니다.</p></div>
   <div class="steps">
-    <div class="st on"><span class="sno">01</span><h3>문의</h3><span class="sd">이름과 연락처만</span></div>
+    <div class="st"><span class="sno">01</span><h3>문의</h3><span class="sd">이름과 연락처만</span></div>
     <div class="st"><span class="sno">02</span><h3>조건 정리</h3><span class="sd">당일 연락</span></div>
     <div class="st"><span class="sno">03</span><h3>계약</h3><span class="sd">서류 안내</span></div>
     <div class="st"><span class="sno">04</span><h3>탁송 출고</h3><span class="sd">전국 어디든</span></div>
@@ -924,7 +935,7 @@ table.pv td{padding:var(--s2) 0;color:var(--ink-2);line-height:1.7}
       <h3>출고까지 동행</h3>
       <p>계약이 끝이 아닙니다. 탁송 날짜까지 제가 챙깁니다.</p>
       <ul class="kv"><li>서류 안내</li><li>탁송 일정</li><li>인수 확인</li></ul></div>
-    <div class="wy hi"><span class="no">04</span>
+    <div class="wy"><span class="no">04</span>
       <h3>렌트·리스 둘 다 계산</h3>
       <p>한 상품을 밀지 않습니다. 두 조건을 같이 뽑아서 어느 쪽이 유리한지 보여드립니다.</p>
       <ul class="kv"><li>장기렌트</li><li>리스</li><li>월납입금 비교</li></ul></div>
