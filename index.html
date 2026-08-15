@@ -193,9 +193,12 @@ header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);
    흰 베일이 왼쪽으로 갈수록 짙어져서 헤드라인 자리만 비워준다 */
 .hphoto{display:none;position:absolute;z-index:-1;inset:0;
   background-size:cover;background-position:50% 50%}
+/* 왼쪽은 '옅게'가 아니라 아예 덮는다. 92% 흰색은 밝은 쇼룸 사진에선 하얗게 보였지만
+   송도처럼 대비가 센 사진에서는 그대로 비쳐서 헤드라인 뒤가 지저분해졌다.
+   헤드라인이 앉는 구간(0~34%)은 흰색 100% 로 막고 거기서부터 사진을 연다 */
 .hphoto:after{content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(255,255,255,.92) 0%,
-    rgba(255,255,255,.64) 46%,rgba(255,255,255,.34) 100%)}
+  background:linear-gradient(90deg,#fff 0%,#fff 34%,rgba(255,255,255,.86) 48%,
+    rgba(255,255,255,.5) 72%,rgba(255,255,255,.24) 100%)}
 body.h-light .hero{background:var(--white);color:var(--ink)}
 body.h-light .hero-bg{display:none}
 body.h-light .hphoto{display:block}
