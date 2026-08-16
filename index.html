@@ -235,6 +235,10 @@ body.h-light .hero .form{box-shadow:inset 0 0 0 1px var(--line),var(--sh2)}
 .fld input::placeholder{color:var(--faint)}
 .fld.on input{background:#fff;border-color:var(--brand);box-shadow:0 0 0 3px rgba(20,98,74,.12)}
 .fld.err input{background:#fff;border-color:var(--dan)}
+/* 오류 칸에 커서가 들어가면 기본 초록 포커스 링이 빨강을 덮어버린다.
+   고칠 칸이 어디인지 안 보이게 되므로 오류가 이기게 한다 */
+.fld.err input:focus,.fld.err input:focus-visible{
+  outline-color:var(--dan);border-color:var(--dan)}
 .fld .msg{margin-top:var(--s2);font-size:var(--t6);color:var(--dan);font-weight:600}
 .agree .msg{width:100%;margin-top:var(--s2);font-size:var(--t6);color:var(--dan);font-weight:600}
 .agree.err i{box-shadow:inset 0 0 0 1.5px var(--dan)}
@@ -561,6 +565,7 @@ table.pv th{text-align:left;width:96px;color:var(--muted);font-weight:700;
   padding:var(--s2) 0;vertical-align:top}
 table.pv td{padding:var(--s2) 0;color:var(--ink-2);line-height:1.7}
 .pvn{margin-top:var(--s4);font-size:var(--t6);color:var(--muted)}
+.pvn a{color:var(--brand);font-weight:700;text-decoration:underline;text-underline-offset:2px}
 .sheet .btn{margin-top:var(--s5)}
 .back{display:inline-flex;align-items:center;gap:var(--s2);font-size:var(--t5);
   font-weight:700;color:var(--muted);margin-bottom:var(--s3)}
@@ -1064,7 +1069,8 @@ pick(1);
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pvT">
     <h3 id="pvT">개인정보 수집·이용 동의</h3>
     <table class="pv">
-      <tr><th>수집 항목</th><td>이름, 연락처, 관심 차종, 월 예산</td></tr>
+      <tr><th>수집 항목</th><td>이름, 연락처<br>
+        (선택) 관심 차종, 월 예산, 필요 시점, 그 밖에 남기신 내용</td></tr>
       <tr><th>수집 목적</th><td>상담 연락 및 견적 안내</td></tr>
       <tr><th>보유 기간</th><td>상담 종료 후 1년</td></tr>
       <tr><th>제3자 제공</th><td>접수 단계에서는 <b>제공하지 않습니다.</b>
