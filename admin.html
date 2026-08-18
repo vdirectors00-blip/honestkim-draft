@@ -570,16 +570,16 @@ body.authed .gate{display:none}
     <div class="fun" id="funnel"></div>
   </div>
 </div></section><section id="v-leads" hidden>
-<div class="ph"><h1>상담함</h1><span class="upd">08-09 18:04 기준</span></div>
-<div class="tabs"><button class="tab on" onclick="tab('all',this)">전체<em id="cnt-all">12</em></button><button class="tab" onclick="tab('new',this)">신규<em id="cnt-new">0</em></button><button class="tab" onclick="tab('call',this)">통화<em id="cnt-call">0</em></button><button class="tab" onclick="tab('quo',this)">견적<em id="cnt-quo">0</em></button><button class="tab" onclick="tab('con',this)">계약<em id="cnt-con">0</em></button><button class="tab" onclick="tab('no',this)">무응답<em id="cnt-no">0</em></button></div>
+<div class="ph"><h1>상담함</h1><span class="upd" id="leadupd"></span></div>
+<div class="tabs"><button class="tab on" onclick="tab('all',this)">전체<em id="cnt-all">0</em></button><button class="tab" onclick="tab('new',this)">신규<em id="cnt-new">0</em></button><button class="tab" onclick="tab('call',this)">통화<em id="cnt-call">0</em></button><button class="tab" onclick="tab('quo',this)">견적<em id="cnt-quo">0</em></button><button class="tab" onclick="tab('con',this)">계약<em id="cnt-con">0</em></button><button class="tab" onclick="tab('no',this)">무응답<em id="cnt-no">0</em></button></div>
 <div class="bar">
   <label class="sch"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.8l-.3-.3a6.5 6.5 0 1 0-.7.7l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg>
     <input type="search" placeholder="이름 또는 연락처" oninput="search(this.value)"></label>
-  <button class="ib"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/></svg>이번 달</button>
-  <button class="ib" onclick="toast('엑셀 파일을 내려받습니다')"><svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>엑셀 내려받기</button>
+  <button class="ib" id="mbtn" onclick="monthOnly(this)"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/></svg>이번 달만</button>
+  <button class="ib" onclick="downloadCsv()"><svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>엑셀 내려받기</button>
 </div>
 <div class="card mt">
-  <div class="ch"><h2>문의 목록</h2><span class="r" id="leadcnt">12건</span></div>
+  <div class="ch"><h2>문의 목록</h2><span class="r" id="leadcnt">0건</span></div>
   <div class="tw"><table class="fold"><thead><tr>
     <th style="width:108px"><button class="so" onclick="sortBy('at',this)">접수<svg viewBox="0 0 24 24"><path d="M12 5 8 10h8l-4-5zm0 14 4-5H8l4 5z"/></svg></button></th>
     <th style="width:80px"><button class="so" onclick="sortBy('nm',this)">이름<svg viewBox="0 0 24 24"><path d="M12 5 8 10h8l-4-5zm0 14 4-5H8l4 5z"/></svg></button></th>
@@ -769,6 +769,16 @@ body.authed .gate{display:none}
     </div>
   </div>
 </div>
+<div class="card mt"><div class="ch"><h2>관리자 비밀번호</h2>
+  <span class="r">이 화면에 들어올 때 쓰는 비밀번호입니다</span></div>
+  <div class="frm"><div class="row2">
+    <div class="f"><label>새 비밀번호</label><input class="in" data-k="pw1" value="" placeholder="8자 이상" type="password" autocomplete="new-password"></div>
+    <div class="f"><label>한 번 더</label><input class="in" data-k="pw2" value="" placeholder="같은 값을 다시" type="password" autocomplete="new-password"></div>
+  </div></div>
+  <div class="foot"><span class="r"></span>
+    <button class="pri" onclick="changePw()"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>비밀번호 바꾸기</button></div>
+</div>
+
 <div class="card mt"><div class="foot"><span class="r"></span>
   <button class="pri" onclick="saveSite()"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>저장</button></div></div></section><section id="v-alert" hidden>
 <div class="ph"><h1>알림 설정</h1><span class="upd">문자는 건당 8.4원 (부가세 별도)</span></div>
@@ -1054,6 +1064,38 @@ document.addEventListener('input', function(e){
 /* ───── 상담함 ───── */
 var FILTER = 'all', Q = '', SORT = null, SDIR = 1;
 
+
+/* ───── 이번 달만 보기 · 엑셀 내려받기 ───── */
+var MONTH_ONLY = false;
+function monthOnly(btn){
+  MONTH_ONLY = !MONTH_ONLY;
+  btn.classList.toggle('on', MONTH_ONLY);
+  drawLeads();
+}
+/* 엑셀에서 바로 열리게 BOM 을 붙인다. 없으면 한글이 깨져 보인다 */
+function downloadCsv(){
+  var rows = leadList();
+  if(!rows.length) return toast('내려받을 문의가 없습니다');
+  var head = ['접수', '이름', '연락처', '관심 차종', '월 예산', '필요 시점', '유입', '상태', '메모', '다음 연락'];
+  var body = rows.map(function(d){
+    return [d.at, d.nm, d.tel, d.car, d.bud, d.when, d.src, STN[d.st] || d.st, d.memo, d.next];
+  });
+  var csv = [head].concat(body).map(function(r){
+    return r.map(function(v){
+      return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    }).join(',');
+  }).join('\r\n');
+  var url = URL.createObjectURL(new Blob(['\uFEFF' + csv], {type:'text/csv;charset=utf-8'}));
+  var a = document.createElement('a');
+  var t = new Date();
+  a.href = url;
+  a.download = '문의목록_' + t.getFullYear() +
+    ('0' + (t.getMonth() + 1)).slice(-2) + ('0' + t.getDate()).slice(-2) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast(rows.length + '건을 내려받았습니다');
+}
+
 function leadRow(d){
   var car = d.car ? (esc(d.car) + (d.bud ? ' <span class="sub">· ' + esc(d.bud) + '</span>' : ''))
                   : '<span class="dim">차종 미입력</span>';
@@ -1077,7 +1119,10 @@ function leadRow(d){
 }
 
 function leadList(){
+  var mm = new Date();
+  var pre = ('0' + (mm.getMonth() + 1)).slice(-2) + '-';
   var list = LEADS.filter(function(d){
+    if(MONTH_ONLY && String(d.at).slice(0, 3) !== pre) return false;
     if(FILTER !== 'all' && d.st !== FILTER) return false;
     if(!Q) return true;
     return (d.nm + d.tel + (d.car || '')).replace(/-/g,'').indexOf(Q.replace(/-/g,'')) > -1;
@@ -1111,6 +1156,12 @@ function drawLeads(){
     if(!el) return;
     el.textContent = nw; el.hidden = (nw === 0);
   });
+  var up = document.getElementById('leadupd');
+  if(up){
+    var t = new Date();
+    up.textContent = ('0' + (t.getMonth() + 1)).slice(-2) + '-' + ('0' + t.getDate()).slice(-2) +
+      ' ' + ('0' + t.getHours()).slice(-2) + ':' + ('0' + t.getMinutes()).slice(-2) + ' 기준';
+  }
   drawWait(); drawPop();
 }
 
@@ -1693,6 +1744,7 @@ function drawStats(){
 
 /* ───── 사이트 정보 ─────
    화면의 data-k 와 DB 칸 이름을 여기서 잇는다. 한 곳에만 적어둔다 */
+/* pw1·pw2 는 여기 없다. 비밀번호는 따로 보낸다 */
 var SITE_MAP = {
   s1:'biz_name', s2:'owner', s3:'biz_no', s4:'address', s5:'phone', s6:'email',
   c1:'kakao_channel_url', c2:'youtube', c3:'insta', c4:'blog',
@@ -1709,6 +1761,16 @@ function fillSite(){
   ['sms_on_receive','sms_on_done','sms_on_fail'].forEach(function(k){
     var el = document.querySelector('.sw[data-k="' + k + '"]');
     if(el) el.classList.toggle('on', SETTINGS[k] !== false);
+  });
+}
+
+function changePw(){
+  var a = document.querySelector('[data-k="pw1"]'), b2 = document.querySelector('[data-k="pw2"]');
+  if(!a || !b2) return;
+  if(a.value.length < 8) return toast('8자 이상으로 정해주세요');
+  if(a.value !== b2.value) return toast('두 칸이 서로 다릅니다');
+  push('pw_change', {pw: a.value}, '비밀번호를 바꿨습니다').then(function(ok){
+    if(ok){ a.value = ''; b2.value = ''; }
   });
 }
 function saveSite(msg){
