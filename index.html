@@ -1261,6 +1261,7 @@ function onSubmit(e){
       return;
     }
     var sf = form.querySelector('.sendfail'); if (sf) sf.remove();
+    trackLead(second ? 2 : 1);
     if (second){ done(form); return; }
     leadId = r.id;
     if (form.id === 'step1'){
@@ -1417,6 +1418,41 @@ function tick(){
 
 /* 사이트 정보(관리자 > 사이트 정보)도 화면에 반영한다.
    "푸터와 첫 화면에 그대로 반영됩니다" 라고 적어놓고 안 되면 그게 거짓말이다 */
+
+/* 측정 태그. 관리자에 ID 를 넣으면 그때부터 붙는다.
+   넣기 전에는 아무것도 안 실려서 페이지가 가벼운 채로 있다.
+   주의: 문의 완료를 전환으로 보내야 메타가 '문의할 사람' 을 찾아준다. 방문만 보내면 의미가 적다 */
+function loadTags(c){
+  if(!c) return;
+  if(c.ga4_id && !window.__ga){
+    window.__ga = 1;
+    var g = document.createElement('script');
+    g.async = true;
+    g.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(c.ga4_id);
+    document.head.appendChild(g);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', c.ga4_id);
+  }
+  if(c.meta_pixel && !window.__fb){
+    window.__fb = 1;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', c.meta_pixel);
+    fbq('track', 'PageView');
+  }
+}
+/* 문의가 실제로 저장됐을 때만 부른다. 버튼 클릭이 아니라 저장 성공이 전환이다 */
+function trackLead(step){
+  try{
+    if(window.gtag) gtag('event', step === 2 ? 'generate_lead_full' : 'generate_lead');
+    if(window.fbq) fbq('track', 'Lead');
+  }catch(e){}
+}
 function paintSite(c){
   if(!c) return;
   if(c.total_deliveries){
@@ -1461,6 +1497,7 @@ function paint(d){
     if(yb) yb.innerHTML = d.shorts.map(shCard).join('');
   }
   paintSite(d.site);
+  loadTags(d.site);
   tick();
 }
 if(PUB_API){
