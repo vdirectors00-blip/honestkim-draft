@@ -182,6 +182,9 @@ tbody tr.sum td{background:var(--th-bg);font-weight:800;border-top:1px solid var
   border-radius:var(--r1);padding:var(--s1) var(--s3);white-space:nowrap}
 .tag.con{background:var(--ok-bg);color:var(--ok)}
 .tag.no{background:var(--dan-bg);color:var(--dan)}
+/* 문자 발송 결과. 아직 결과를 모르는 상태는 색을 쓰지 않는다 */
+.tag.wait{background:var(--bg);color:var(--muted)}
+.kpi{font-size:var(--t1);font-weight:800;color:var(--ink);line-height:1.1}
 .st.new{background-color:var(--dan-bg);color:var(--dan)}
 .st.call{background-color:var(--brand-bg);color:var(--brand-deep)}
 .st.quo{background-color:var(--info-bg);color:var(--info)}
@@ -783,9 +786,6 @@ body.authed .gate{display:none}
   <button class="pri" onclick="saveSite()"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>저장</button></div></div></section><section id="v-alert" hidden>
 <div class="ph"><h1>알림 설정</h1><span class="upd">문자는 건당 8.4원 (부가세 별도)</span></div>
 
-<div class="hint no ic mt"><svg viewBox="0 0 24 24"><path d="M12 2 1 21h22L12 2zm1 15h-2v-2h2v2zm0-4h-2V9h2v4z"/></svg>
-  <span><b>아직 문자가 나가지 않습니다.</b> 알리고 계정과 발신번호 등록이 끝나야 켜집니다.
-  아래 설정은 지금 저장해두면 연결되는 날 그대로 적용됩니다.</span></div>
 
 <div class="grid2 mt">
   <div class="card"><div class="ch"><h2>문자 알림</h2></div>
@@ -801,21 +801,22 @@ body.authed .gate{display:none}
         <div class="d">1분 뒤 한 번 재시도한 뒤에도 실패하면 알립니다</div></div>
         <span class="sw on" data-k="sms_on_fail"></span></div>
     </div>
-    <div class="foot"><span class="r"></span>
+    <div class="foot">
+      <button onclick="smsTest()"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>테스트 발송</button>
       <button class="pri" onclick="saveSite('알림 설정을 저장했습니다')"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>저장</button></div>
   </div>
 
   <div class="card"><div class="ch"><h2>남은 문자</h2><span class="r">알리고</span></div>
-    <div class="frm">
-      <div class="empty"><h3>연결 전입니다</h3>
-        <p>알리고 계정을 연결하면 남은 금액과 보낼 수 있는 건수가 여기 뜹니다.</p></div>
-    </div>
+    <div class="frm" id="smsCnt"></div>
   </div>
 </div>
 
-<div class="card mt"><div class="ch"><h2>발송 내역</h2></div>
-  <div class="frm"><div class="empty"><h3>아직 보낸 문자가 없습니다</h3>
-    <p>연결된 뒤 나간 문자가 여기 쌓입니다.</p></div></div>
+<div class="card mt"><div class="ch"><h2>발송 내역</h2><span class="r">최근 50건</span></div>
+  <div class="tw"><table class="fold"><thead><tr>
+    <th style="width:120px">보낸 때</th><th style="width:110px">종류</th>
+    <th style="width:130px">받는 번호</th><th>내용</th>
+    <th style="width:150px" class="r">결과</th>
+  </tr></thead><tbody id="smsbody"></tbody></table></div>
 </div></section></main>
 </div>
 
@@ -944,10 +945,11 @@ function boot(){
   return api('boot', {}).then(function(j){
     if(!j || !j.ok) return;
     LEADS = j.leads; DATA = j.data; SETTINGS = j.settings || {}; STATS = j.stats;
+    SMS = j.sms || {log: [], cnt: null};
     document.body.classList.add('authed');
     var me = document.getElementById('me');
     if(me) me.textContent = SETTINGS.owner || '';
-    drawLeads(); drawHome(); drawStats(); fillSite();
+    drawLeads(); drawHome(); drawStats(); fillSite(); drawSms();
     ['rv','sale','sh'].forEach(function(k){ KIND[k].cur = 0; renderList(k); fillEdit(k); });
     drawPop(); route();
   }).catch(function(){});
@@ -1761,6 +1763,43 @@ function fillSite(){
   ['sms_on_receive','sms_on_done','sms_on_fail'].forEach(function(k){
     var el = document.querySelector('.sw[data-k="' + k + '"]');
     if(el) el.classList.toggle('on', SETTINGS[k] !== false);
+  });
+}
+
+/* ───── 문자 ─────
+   알리고는 등록된 IP 에서만 받는다. 그래서 실제 발송은 서버(DB)가 하고
+   여기서는 그 결과만 보여준다. 화면에서 지어내는 숫자는 하나도 없다 */
+var SMS = {log: [], cnt: null};
+
+function drawSms(){
+  var c = document.getElementById('smsCnt');
+  if(c){
+    c.innerHTML = SMS.cnt == null
+      ? '<div class="empty"><h3>아직 못 불러왔습니다</h3>'
+        + '<p>잠시 뒤 다시 열면 알리고에서 받아옵니다.</p></div>'
+      : '<div class="kpi"><b>' + SMS.cnt.toLocaleString() + '</b>건</div>'
+        + '<div class="d">지금 보낼 수 있는 문자 · ' + esc(SMS.cnt_at || '') + ' 기준</div>';
+  }
+  var body = document.getElementById('smsbody');
+  if(!body) return;
+  body.innerHTML = (SMS.log && SMS.log.length) ? SMS.log.map(function(r){
+    var cls = r.st === 'failed' ? 'no' : (r.st === 'sending' ? 'wait' : 'con');
+    return '<tr><td class="num" data-l="보낸 때">' + esc(r.at) + '</td>' +
+      '<td data-l="종류">' + esc(r.kind) + '</td>' +
+      '<td data-l="받는 번호">' + esc(r.to) + '</td>' +
+      '<td class="sub" data-l="내용">' + esc(r.msg) + '</td>' +
+      '<td class="r" data-l="결과"><span class="tag ' + cls + '">' + esc(r.st_ko) + '</span>' +
+      (r.why ? ' <span class="sub">' + esc(r.why) + '</span>' : '') + '</td></tr>';
+  }).join('')
+  : '<tr><td colspan="5"><div class="empty"><h3>아직 보낸 문자가 없습니다</h3>' +
+    '<p>문의가 들어오면 여기에 쌓입니다.</p></div></td></tr>';
+}
+
+function smsTest(){
+  var to = (document.querySelector('[data-k="a1"]') || {}).value || '';
+  if(!to) return toast('받을 번호를 먼저 넣어주세요');
+  push('sms_test', {}, '테스트 문자를 보냈습니다').then(function(ok){
+    if(ok) setTimeout(boot, 4000);
   });
 }
 
