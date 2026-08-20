@@ -716,7 +716,7 @@ table.pv td{padding:var(--s2) 0;color:var(--ink-2);line-height:1.7}
         autocomplete="off"></label></div>
       <h3>1분 견적 신청</h3>
       <p class="lead">이름과 연락처만 남기셔도 됩니다.<br>
-        아래 두 칸까지 채우시면 렌트·리스를 <b>둘 다 계산해서</b> 보내드립니다.</p>
+        아래를 채우실수록 렌트·리스를 <b>둘 다 계산해서</b> 정확히 보내드립니다.</p>
       <div class="fld"><label for="m-name">이름</label>
         <input id="m-name" name="name" autocomplete="name" placeholder="홍길동"></div>
       <div class="fld"><label for="m-tel">연락처</label>
@@ -727,19 +727,14 @@ table.pv td{padding:var(--s2) 0;color:var(--ink-2);line-height:1.7}
         <div class="fld"><label for="m-bud">월 예산 <span>(선택)</span></label>
           <input id="m-bud" name="budget" inputmode="numeric" placeholder="예: 70만원"></div>
       </div>
-      <label class="agree" for="m-agree"><input type="checkbox" id="m-agree"><i aria-hidden="true"></i>
-        <span>개인정보 수집·이용에 동의합니다 (필수) <u>자세히</u></span></label>
-      <button class="btn full" type="submit">다음</button>
-      <div class="note">상담 비용은 없습니다</div>
-    </form>
-    <form class="form" id="step2" style="display:none" novalidate>
-      <h3>두 가지만 더</h3>
-      <p class="lead">모르는 항목은 비워두셔도 됩니다.</p>
       <div class="fld"><label for="m-when">언제쯤 필요하신가요 <span>(선택)</span></label>
         <input id="m-when" name="when" placeholder="예: 이번 달 안에 / 아직 미정"></div>
       <div class="fld"><label for="m-memo">그 밖에 알려주실 것 <span>(선택)</span></label>
         <input id="m-memo" name="memo" placeholder="예: 법인 명의 / 장거리 주행 / 전기차 고민 중"></div>
+      <label class="agree" for="m-agree"><input type="checkbox" id="m-agree"><i aria-hidden="true"></i>
+        <span>개인정보 수집·이용에 동의합니다 (필수) <u>자세히</u></span></label>
       <button class="btn full" type="submit">견적 받기</button>
+      <div class="note">상담 비용은 없습니다</div>
     </form>
   </div>
 
@@ -1081,10 +1076,6 @@ if (q.indexOf('state=sending') >= 0)
     b.classList.add('loading'); b.textContent = '보내는 중'; });
 if (q.indexOf('state=soldout') >= 0)
   document.querySelectorAll('.sale')[0].classList.add('soldout');
-if (q.indexOf('step2') >= 0) {
-  document.getElementById('step1').style.display = 'none';
-  document.getElementById('step2').style.display = 'block';
-}
 if (q.indexOf('state=focus') >= 0)
   document.querySelectorAll('.form').forEach(function(fm){
     var f = fm.querySelectorAll('.fld')[1]; if (f) f.classList.add('on');
@@ -1122,8 +1113,6 @@ if (q.indexOf('state=empty') >= 0) {
 
 /* ---- 실동작 ---- */
 function visibleForm(){
-  var s2 = document.getElementById('step2');
-  if (s2 && s2.offsetParent !== null) return s2;
   return document.getElementById('step1');
 }
 
@@ -1242,16 +1231,16 @@ function onSubmit(e){
   if (!validate(form)) return;
   var btn = form.querySelector('button[type=submit]');
   var label = btn.textContent;
-  var second = form.id === 'step2';
-  /* 주소에 ?step2 를 붙여 2단계만 열어보는 확인용 경로가 있다.
-     그때는 1단계를 안 거쳐서 id 가 없다. 없는 행을 고칠 수는 없으니 그냥 닫는다 */
-  if (second && !leadId){ done(form); return; }
+  var second = false;   /* 2026-08-20 한 화면 통합. 2단계 왕복은 없앴다 */
   btn.classList.add('loading'); btn.textContent = '보내는 중'; btn.disabled = true;
+  /* 2026-08-20: 한 화면 한 번 제출로 바꿨다. 예전엔 1단계·2단계로 나눠 두 번 저장했고
+     그 탓에 **문의 한 건에 문자가 두 통** 갔다. 이제 한 번에 다 보낸다 */
   var body = second
     ? {step: 2, id: leadId, when: val(form, 'when'), memo: val(form, 'memo'),
         company: val(form, 'company')}
     : {name: val(form, 'name'), phone: val(form, 'phone'), car: val(form, 'car'),
-        budget: val(form, 'budget'), company: val(form, 'company'), agreed: true,
+        budget: val(form, 'budget'), when: val(form, 'when'), memo: val(form, 'memo'),
+        company: val(form, 'company'), agreed: true,
         source: location.search.replace(/^\?/, ''), sale: window.__pendingCar || ''};
   function reset(){
     btn.classList.remove('loading'); btn.textContent = label; btn.disabled = false;
@@ -1268,15 +1257,7 @@ function onSubmit(e){
     trackLead(second ? 2 : 1);
     if (second){ done(form); return; }
     leadId = r.id;
-    if (form.id === 'step1'){
-      form.style.display = 'none';
-      var s2 = document.getElementById('step2');
-      s2.style.display = 'block';
-      s2.scrollIntoView({behavior:'smooth', block:'center'});
-    } else {
-      /* 모달 안의 복사본에는 2단계가 없다. 1단계로 끝낸다 */
-      done(form);
-    }
+    done(form);
   }).catch(function(){
     reset();
     fail(form, '연결이 끊겼습니다. 전화나 카카오톡으로 연락 주세요');
@@ -1285,15 +1266,6 @@ function onSubmit(e){
 document.querySelectorAll('form.form').forEach(function(form){
   form.addEventListener('submit', onSubmit);
 });
-
-/* 2단계 이전 */
-var s2 = document.getElementById('step2');
-if (s2) s2.insertAdjacentHTML('afterbegin',
-  '<button class="back" type="button" id="backBtn">← 이전</button>');
-var bb = document.getElementById('backBtn');
-if (bb) bb.onclick = function(){
-  s2.style.display='none'; document.getElementById('step1').style.display='block';
-};
 
 /* 견적 모달 */
 var qm=document.getElementById('quote'), slot=document.getElementById('quoteSlot');
