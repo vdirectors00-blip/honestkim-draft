@@ -610,7 +610,7 @@ body.authed .gate{display:none}
       <div class="f"><label><svg viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>사진</label>
         <div class="uploads"><span class="upi" data-k="thumb" onclick="pickImg('rv')"></span>
           <button class="upi add" onclick="pickImg('rv')"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg></button></div>
-        <div class="hint">한 장만 올라갑니다. 올리면 자동으로 줄여서 저장합니다</div></div>
+        <div class="hint">한 장</div></div>
       <div class="row2">
         <div class="f"><label>고객명</label><input class="in" data-k="nm" value="" placeholder="" oninput="maskHint(this)"><div class="hint h-mask">화면에 나갈 이름</div></div>
         <div class="f"><label>지역</label><input class="in" data-k="region" value="" placeholder=""></div>
@@ -627,7 +627,7 @@ body.authed .gate{display:none}
         <div class="f"><label>출고일</label><input class="in" data-k="d2" value="" placeholder="YYYY-MM-DD" oninput="calcDays()"></div>
       </div>
       <div class="f"><div class="hint ok h-days"></div></div>
-      <div class="f"><label>후기 본문</label><textarea class="in" data-k="body" placeholder=""></textarea><div class="hint ">고객이 쓴 글은 줄이지 않습니다. 화면에서 4줄까지 보이고 나머지는 더보기로 접힙니다</div></div>
+      <div class="f"><label>후기 본문</label><textarea class="in" data-k="body" placeholder=""></textarea></div>
     </div>
     <div class="foot"><button class="del" onclick="askDel('rv')"><svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"/></svg>삭제</button><span class="r"></span><button class="gho" onclick="reloadEdit('rv')">되돌리기</button><button class="pri" onclick="saveItem('rv','후기를 저장했습니다')"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>저장</button></div>
   </div>
@@ -652,18 +652,18 @@ body.authed .gate{display:none}
       <div class="f"><label><svg viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>차량 사진</label>
         <div class="uploads"><span class="upi" data-k="thumb" onclick="pickImg('sale')"></span>
           <button class="upi add" onclick="pickImg('sale')"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg></button></div>
-        <div class="hint">실제 매물 사진을 올리세요. 없으면 카드에 사진 자리가 비어 보입니다</div></div>
+        <div class="hint">한 장</div></div>
       <div class="f"><label>차종명</label><input class="in" data-k="car" value="" placeholder=""></div>
       <div class="f"><label>연식 · 연료 · 트림</label><input class="in" data-k="spec" value="" placeholder=""></div>
       <div class="f"><label>차량가 <em>(원)</em></label><input class="in" data-k="price" value="" placeholder=""></div>
       <div class="row2">
         <div class="f"><label>월 렌트료 <em>(할인 후)</em></label><input class="in" data-k="rent" value="" placeholder="" oninput="calcOff()"></div>
-        <div class="f"><label>월 렌트료 <em>(할인 전)</em></label><input class="in" data-k="rentold" value="" placeholder="" oninput="calcOff()"><div class="hint h-off">두 값으로 할인율을 계산합니다</div></div>
+        <div class="f"><label>월 렌트료 <em>(할인 전)</em></label><input class="in" data-k="rentold" value="" placeholder="" oninput="calcOff()"><div class="hint h-off">할인율 자동 계산</div></div>
       </div>
-      <div class="f"><label>조건 <em>(필수)</em></label><input class="in" data-k="cond" value="" placeholder=""><div class="hint ">가격만 있고 조건이 없는 카드는 저장되지 않습니다</div></div>
+      <div class="f"><label>조건 <em>(필수)</em></label><input class="in" data-k="cond" value="" placeholder=""><div class="hint ">조건 없으면 저장 안 됨</div></div>
       <div class="row2">
         <div class="f"><label>태그</label><input class="in" data-k="tag" value="" placeholder=""></div>
-        <div class="f"><label><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/></svg>마감 일시</label><input class="in" data-k="due" value="" placeholder=""><div class="hint ">카운트다운이 표시됩니다</div></div>
+        <div class="f"><label><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/></svg>마감 일시</label><input class="in" data-k="due" value="" placeholder=""><div class="hint ">카운트다운 표시</div></div>
       </div>
     </div>
     <div class="foot"><button class="del" onclick="askDel('sale')"><svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"/></svg>삭제</button><span class="r"></span><button class="gho" onclick="reloadEdit('sale')">되돌리기</button><button class="pri" onclick="saveItem('sale','특가를 저장했습니다')"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>저장</button></div>
@@ -704,8 +704,8 @@ body.authed .gate{display:none}
       <div class="f"><label><svg viewBox="0 0 24 24"><path d="M3.9 12A3.1 3.1 0 0 1 7 8.9h4V7H7a5 5 0 0 0 0 10h4v-1.9H7A3.1 3.1 0 0 1 3.9 12zM8 13h8v-2H8v2zm9-6h-4v1.9h4a3.1 3.1 0 0 1 0 6.2h-4V17h4a5 5 0 0 0 0-10z"/></svg>유튜브 주소</label><input class="in" data-k="url" value="" placeholder="https://youtube.com/shorts/..."></div>
       <div class="f"><label><svg viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>미리보기</label>
         <div class="thumb" data-k="thumb" style="width:104px;height:184px"></div>
-        <div class="hint">썸네일은 주소에서 자동으로 가져옵니다</div></div>
-      <div class="f"><label>제목 <em>(직접 입력)</em></label><input class="in" data-k="ttl" value="" placeholder=""><div class="hint ">제목은 자동으로 가져오지 않습니다. 조회수는 화면에 표시하지 않습니다</div></div>
+        <div class="hint">주소에서 자동</div></div>
+      <div class="f"><label>제목</label><input class="in" data-k="ttl" value="" placeholder=""></div>
     </div>
     <div class="foot"><button class="del" onclick="askDel('sh')"><svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"/></svg>삭제</button><span class="r"></span><button class="gho" onclick="reloadEdit('sh')">되돌리기</button><button class="pri" onclick="saveItem('sh','영상을 저장했습니다')"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>저장</button></div>
   </div>
@@ -719,7 +719,7 @@ body.authed .gate{display:none}
           <div class="f"><label>상호</label><input class="in" data-k="s1" value="" placeholder=""></div>
           <div class="f"><label>대표자명</label><input class="in" data-k="s2" value="" placeholder=""></div>
         </div>
-        <div class="f"><label>사업자등록번호</label><input class="in" data-k="s3" value="" placeholder="000-00-00000"><div class="hint ">비워두면 푸터에서 이 줄이 사라집니다</div></div>
+        <div class="f"><label>사업자등록번호</label><input class="in" data-k="s3" value="" placeholder="000-00-00000"><div class="hint ">비우면 푸터에서 숨김</div></div>
         <div class="f"><label>사업장 주소</label><input class="in" data-k="s4" value="" placeholder="사업자등록증에 적힌 주소"></div>
         <div class="row2">
           <div class="f"><label><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>노출 전화번호</label><input class="in" data-k="s5" value="" placeholder=""></div>
@@ -742,7 +742,7 @@ body.authed .gate{display:none}
   <div>
     <div class="card"><div class="ch"><h2>첫 화면 숫자</h2></div>
       <div class="frm">
-        <div class="f"><label>누적 출고 대수 <em>(대)</em></label><input class="in" data-k="n1" value="" placeholder=""><div class="hint ">비우면 첫 화면에서 이 칸이 사라집니다</div></div>
+        <div class="f"><label>누적 출고 대수 <em>(대)</em></label><input class="in" data-k="n1" value="" placeholder=""><div class="hint ">비우면 첫 화면에서 숨김</div></div>
         <div class="f"><label>상담 가능 시간</label><input class="in" data-k="n2" value="" placeholder=""></div>
         <div class="f"><label>출고 예상 기간</label>
           <div class="in ro">후기에서 자동 계산</div>
@@ -754,26 +754,25 @@ body.authed .gate{display:none}
       <div class="frm">
         <div class="row2">
           <div class="f"><label>심의필 번호</label><input class="in" data-k="l1" value="" placeholder=""></div>
-          <div class="f"><label><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/></svg>유효기간</label><input class="in" data-k="l2" value="" placeholder=""><div class="hint ">만료 30일 전부터 알립니다</div></div>
+          <div class="f"><label><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/></svg>유효기간</label><input class="in" data-k="l2" value="" placeholder=""><div class="hint ">만료 30일 전 알림</div></div>
         </div>
-        <div class="f"><label>고지 문구</label><textarea class="in" data-k="l3" placeholder="제휴사에서 받은 문구를 그대로 붙여넣으세요"></textarea><div class="hint ">저희가 지어내면 안 되는 부분입니다</div></div>
+        <div class="f"><label>고지 문구</label><textarea class="in" data-k="l3" placeholder="제휴사에서 받은 문구를 그대로 붙여넣으세요"></textarea></div>
       </div>
     </div>
 
     <div class="card mt"><div class="ch"><h2>측정</h2>
-      <span class="r">넣으면 홈에 트래픽이 뜹니다</span></div>
+      <span class="r">GA4 · 메타 픽셀</span></div>
       <div class="frm">
         <div class="row2">
           <div class="f"><label>GA4 측정 ID</label><input class="in" data-k="g1" value="" placeholder="G-XXXXXXXXXX"></div>
           <div class="f"><label>메타 픽셀 ID</label><input class="in" data-k="g2" value="" placeholder="숫자만"></div>
         </div>
-        <div class="f"><label>GA4 속성 ID <em>(홈 화면용)</em></label><input class="in" data-k="g3" value="" placeholder="숫자만"><div class="hint ">이걸 넣어야 방문·전환율이 이 화면에 들어옵니다. 비우면 측정만 되고 숫자는 GA에서 보셔야 합니다</div></div>
+        <div class="f"><label>GA4 속성 ID <em>(홈 화면용)</em></label><input class="in" data-k="g3" value="" placeholder="숫자만"><div class="hint ">홈 화면 트래픽 표시용</div></div>
       </div>
     </div>
   </div>
 </div>
-<div class="card mt"><div class="ch"><h2>관리자 비밀번호</h2>
-  <span class="r">이 화면에 들어올 때 쓰는 비밀번호입니다</span></div>
+<div class="card mt"><div class="ch"><h2>관리자 비밀번호</h2></div>
   <div class="frm"><div class="row2">
     <div class="f"><label>새 비밀번호</label><input class="in" data-k="pw1" value="" placeholder="8자 이상" type="password" autocomplete="new-password"></div>
     <div class="f"><label>한 번 더</label><input class="in" data-k="pw2" value="" placeholder="같은 값을 다시" type="password" autocomplete="new-password"></div>
@@ -790,16 +789,10 @@ body.authed .gate{display:none}
 <div class="grid2 mt">
   <div class="card"><div class="ch"><h2>문자 알림</h2></div>
     <div class="frm">
-      <div class="f"><label><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>받을 번호</label><input class="in" data-k="a1" value="" placeholder="010-0000-0000"><div class="hint ">문의가 들어오면 이 번호로 갑니다</div></div>
-      <div class="swrow"><div><div class="t">접수되면 바로 알림</div>
-        <div class="d">이름과 연락처만 들어와도 문자를 받습니다</div></div>
+      <div class="f"><label><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>받을 번호</label><input class="in" data-k="a1" value="" placeholder="010-0000-0000"><div class="hint ">문의 알림 받을 번호</div></div>
+      <div class="swrow"><div><div class="t">문의가 들어오면 문자 받기</div>
+        <div class="d"></div></div>
         <span class="sw on" data-k="sms_on_receive"></span></div>
-      <div class="swrow"><div><div class="t">차종까지 채우면 알림</div>
-        <div class="d">같은 사람에게 문자가 두 번 갈 수 있습니다</div></div>
-        <span class="sw on" data-k="sms_on_done"></span></div>
-      <div class="swrow"><div><div class="t">문자 발송 실패 시 알림</div>
-        <div class="d">1분 뒤 한 번 재시도한 뒤에도 실패하면 알립니다</div></div>
-        <span class="sw on" data-k="sms_on_fail"></span></div>
     </div>
     <div class="foot">
       <button class="gho" onclick="smsTest()"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>테스트 발송</button>
@@ -840,7 +833,7 @@ body.authed .gate{display:none}
       <input class="in" id="d-next" type="date"></div>
     <div class="f"><label>메모</label>
       <textarea class="in" id="d-memo" placeholder="통화하면서 적으세요"></textarea>
-      <div class="hint">고객에게는 보이지 않습니다.</div></div>
+      <div class="hint">내부용</div></div>
     <div class="f"><label>기록</label><div class="log" id="d-log"></div></div>
   </div>
   <div class="df2">
@@ -1760,7 +1753,7 @@ function fillSite(){
     var el = document.querySelector('[data-k="' + k + '"]');
     if(el && 'value' in el) el.value = SETTINGS[SITE_MAP[k]] == null ? '' : SETTINGS[SITE_MAP[k]];
   });
-  ['sms_on_receive','sms_on_done','sms_on_fail'].forEach(function(k){
+  ['sms_on_receive'].forEach(function(k){
     var el = document.querySelector('.sw[data-k="' + k + '"]');
     if(el) el.classList.toggle('on', SETTINGS[k] !== false);
   });
@@ -1818,7 +1811,7 @@ function saveSite(msg){
     var el = document.querySelector('[data-k="' + k + '"]');
     if(el && 'value' in el) out[SITE_MAP[k]] = el.value;
   });
-  ['sms_on_receive','sms_on_done','sms_on_fail'].forEach(function(k){
+  ['sms_on_receive'].forEach(function(k){
     var el = document.querySelector('.sw[data-k="' + k + '"]');
     out[k] = el ? el.classList.contains('on') : true;
   });
