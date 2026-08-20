@@ -1,3 +1,6 @@
-# 초안 공개 전이다. 색인 금지.
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /admin.html
+Disallow: /hero.html
+
+Sitemap: https://honestautomobile.com/sitemap.xml
