@@ -716,7 +716,7 @@ table.pv td{padding:var(--s2) 0;color:var(--ink-2);line-height:1.7}
         autocomplete="off"></label></div>
       <h3>1분 견적 신청</h3>
       <p class="lead">이름과 연락처만 남기셔도 됩니다.<br>
-        아래를 채우실수록 렌트·리스를 <b>둘 다 계산해서</b> 정확히 보내드립니다.</p>
+        차종을 알려주시면 렌트·리스를 <b>둘 다 계산해서</b> 보내드립니다.</p>
       <div class="fld"><label for="m-name">이름</label>
         <input id="m-name" name="name" autocomplete="name" placeholder="홍길동"></div>
       <div class="fld"><label for="m-tel">연락처</label>
@@ -724,13 +724,9 @@ table.pv td{padding:var(--s2) 0;color:var(--ink-2);line-height:1.7}
       <div class="fld2">
         <div class="fld"><label for="m-car">관심 차종 <span>(선택)</span></label>
           <input id="m-car" name="car" placeholder="아직 미정도 괜찮습니다"></div>
-        <div class="fld"><label for="m-bud">월 예산 <span>(선택)</span></label>
-          <input id="m-bud" name="budget" inputmode="numeric" placeholder="예: 70만원"></div>
+        <div class="fld"><label for="m-when">출고 희망 시기 <span>(선택)</span></label>
+          <input id="m-when" name="when" placeholder="예: 이번 달 안에"></div>
       </div>
-      <div class="fld"><label for="m-when">언제쯤 필요하신가요 <span>(선택)</span></label>
-        <input id="m-when" name="when" placeholder="예: 이번 달 안에 / 아직 미정"></div>
-      <div class="fld"><label for="m-memo">그 밖에 알려주실 것 <span>(선택)</span></label>
-        <input id="m-memo" name="memo" placeholder="예: 법인 명의 / 장거리 주행 / 전기차 고민 중"></div>
       <label class="agree" for="m-agree"><input type="checkbox" id="m-agree"><i aria-hidden="true"></i>
         <span>개인정보 수집·이용에 동의합니다 (필수) <u>자세히</u></span></label>
       <button class="btn full" type="submit">견적 받기</button>
@@ -1239,8 +1235,7 @@ function onSubmit(e){
     ? {step: 2, id: leadId, when: val(form, 'when'), memo: val(form, 'memo'),
         company: val(form, 'company')}
     : {name: val(form, 'name'), phone: val(form, 'phone'), car: val(form, 'car'),
-        budget: val(form, 'budget'), when: val(form, 'when'), memo: val(form, 'memo'),
-        company: val(form, 'company'), agreed: true,
+        when: val(form, 'when'), company: val(form, 'company'), agreed: true,
         source: location.search.replace(/^\?/, ''), sale: window.__pendingCar || ''};
   function reset(){
     btn.classList.remove('loading'); btn.textContent = label; btn.disabled = false;
