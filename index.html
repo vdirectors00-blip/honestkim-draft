@@ -49,8 +49,7 @@
   w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
 var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
 ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
-  ttq.load('DA3RMNBC77U14HQM5RRG');
-  ttq.page();
+  window.__ttFallback = 'DA3RMNBC77U14HQM5RRG';
 }(window, document, 'ttq');
 </script>
 <!-- TikTok Pixel Code End -->
@@ -1417,6 +1416,16 @@ function loadTags(c){
     gtag('js', new Date());
     gtag('config', c.ga4_id);
   }
+  /* 틱톡은 <head> 에 틀만 깔려 있다. 어느 픽셀을 켤지는 이 값이 정한다.
+     칸이 아예 없으면(옛 서버) 예비값으로 켠다. 칸이 있는데 비어 있으면
+     관리자에서 일부러 끈 것이므로 안 켠다. 이 둘을 섞으면
+     관리자에서 끈 것이 되살아나거나, 배포 순서 때문에 픽셀이 조용히 꺼진다 */
+  if(typeof c.tiktok_pixel === 'undefined'){
+    ttStart(window.__ttFallback);
+  } else {
+    window.__ttCfg = 1;
+    ttStart(c.tiktok_pixel);
+  }
   if(c.meta_pixel && !window.__fb){
     window.__fb = 1;
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -1428,6 +1437,19 @@ function loadTags(c){
     fbq('track', 'PageView');
   }
 }
+/* 틱톡 픽셀 켜기. 한 번만 켠다. 두 번 켜면 방문이 두 번 세어진다 */
+function ttStart(id){
+  id = String(id || '').trim();
+  if(!id || window.__tt || !window.ttq) return;
+  window.__tt = 1;
+  try{ ttq.load(id); ttq.page(); }catch(e){}
+}
+/* 관리자 값을 못 받았을 때만 <head> 에 박아둔 값으로 켠다.
+   서버가 죽어도 픽셀이 멈추지 않게 하는 것이다.
+   관리자 값이 정상적으로 왔는데 비어 있으면 그건 "끈 것" 이라 그대로 둔다 */
+setTimeout(function(){
+  if(!window.__ttCfg) ttStart(window.__ttFallback);
+}, 3000);
 /* 연락처를 국제표기(+82...)로 맞춘다. 틱톡은 이 형태를 해시해서 받는다 */
 function e164(p){
   var d = String(p || '').replace(/[^0-9]/g, '');
