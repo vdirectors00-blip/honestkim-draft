@@ -761,13 +761,16 @@ body.authed .gate{display:none}
     </div>
 
     <div class="card mt"><div class="ch"><h2>측정</h2>
-      <span class="r">GA4 · 메타 픽셀</span></div>
+      <span class="r">GA4 · 메타 · 틱톡</span></div>
       <div class="frm">
         <div class="row2">
           <div class="f"><label>GA4 측정 ID</label><input class="in" data-k="g1" value="" placeholder="G-XXXXXXXXXX"></div>
           <div class="f"><label>메타 픽셀 ID</label><input class="in" data-k="g2" value="" placeholder="숫자만"></div>
         </div>
-        <div class="f"><label>GA4 속성 ID <em>(홈 화면용)</em></label><input class="in" data-k="g3" value="" placeholder="숫자만"><div class="hint ">홈 화면 트래픽 표시용</div></div>
+        <div class="row2">
+          <div class="f"><label>틱톡 픽셀 ID</label><input class="in" data-k="g4" value="" placeholder="영문 대문자와 숫자"><div class="hint ">비우면 사이트에서 빠집니다</div></div>
+          <div class="f"><label>GA4 속성 ID <em>(홈 화면용)</em></label><input class="in" data-k="g3" value="" placeholder="숫자만"><div class="hint ">홈 화면 트래픽 표시용</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1745,7 +1748,7 @@ var SITE_MAP = {
   c1:'kakao_channel_url', c2:'youtube', c3:'insta', c4:'blog',
   n1:'total_deliveries', n2:'consult_hours',
   l1:'simui_no', l2:'simui_until', l3:'notice_text',
-  g1:'ga4_id', g2:'meta_pixel', g3:'ga4_property',
+  g1:'ga4_id', g2:'meta_pixel', g3:'ga4_property', g4:'tiktok_pixel',
   a1:'sms_to'
 };
 function fillSite(){
