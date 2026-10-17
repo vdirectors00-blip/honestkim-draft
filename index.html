@@ -734,6 +734,8 @@ body.mo-fit .agree span{flex:1;min-width:0}
 body.mo-fit .pc-img{padding-top:16px}
 body.mo-fit .pc-img img{width:auto;height:100%;max-width:100%;object-fit:contain;object-position:bottom}
 @media (max-width:820px){
+  /* 카톡 카드 문구: 억지 줄바꿈 빼고 폭대로 (태블릿에서 "월납입금," 한 단어만 줄에 남던 것) */
+  body.mo-fit .pcard .kkc p br{display:none}
   /* 폰·태블릿에서 길게 읽는 글 14 → 16 */
   body.mo-fit .hero .sub{font-size:16px}
   body.mo-fit .intro p, body.mo-fit .intro .quote span{font-size:16px}
@@ -768,8 +770,10 @@ body.mo-fit .pc-img img{width:auto;height:100%;max-width:100%;object-fit:contain
   body.mo-fit .swnav{margin-bottom:8px}
   /* 김과장 카드: 폭 꽉 채우고 그림 왼쪽·글 오른쪽 (세로로 한 화면 먹던 것) */
   body.mo-fit .pcard{max-width:none;width:100%;flex-direction:row;align-items:stretch}
-  body.mo-fit .pc-img{flex:0 0 38%;aspect-ratio:auto}
-  body.mo-fit .pc-img img{height:auto;width:100%;max-height:none}
+  /* 그림은 칸 높이에 꽉 (작게 바닥에 붙어 위가 비던 것). 어깨 양옆만 잘리고 머리는 위 16px 여유 */
+  body.mo-fit .pc-img{flex:0 0 42%;aspect-ratio:auto;position:relative}
+  body.mo-fit .pc-img img{position:absolute;left:0;right:0;bottom:0;top:16px;width:100%;height:calc(100% - 16px);
+    max-width:none;object-fit:cover;object-position:center bottom;margin:0}
   body.mo-fit .pcard .kkc{flex:1;border-top:0;border-left:1px solid var(--line-2);text-align:left;
     display:flex;flex-direction:column;justify-content:center;padding:var(--s4)}
   body.mo-fit .pcard .kkc .btn{width:100%}
@@ -787,6 +791,10 @@ body.mo-fit .pc-img img{width:auto;height:100%;max-width:100%;object-fit:contain
 }
 /* ── 작은 폰 (360 이하, 갤럭시 기본폭) ── */
 @media (max-width:374px){
+  /* 360: 카톡 버튼 글자 한 줄 유지 (두 줄로 꺾이던 것) */
+  body.mo-fit .pc-img{flex-basis:40%}
+  body.mo-fit .pcard .kkc{padding:var(--s4) var(--s3)}
+  body.mo-fit .pcard .kkc .btn{padding:0 var(--s2);font-size:14px;white-space:nowrap}
   /* 견적 팝업: 360 폰에서 '견적 받기' 버튼이 화면 밖으로 밀리던 것 */
   body.mo-fit .modal{padding:12px}
   body.mo-fit .modal .sheet{padding:var(--s4);max-height:94vh}
