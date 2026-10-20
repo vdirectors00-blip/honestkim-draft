@@ -190,6 +190,8 @@ tbody tr.sum td{background:var(--th-bg);font-weight:800;border-top:1px solid var
 .st.quo{background-color:var(--info-bg);color:var(--info)}
 .st.con{background-color:var(--ok-bg);color:var(--ok)}
 .st.no{background-color:var(--bg);color:var(--muted)}
+    /* 불량은 무응답과 같은 회색이라 글자에 줄을 그어 구분한다 */
+    .st.bad{background-color:var(--bg);color:var(--muted);text-decoration:line-through}
 
 /* ── 탭 · 검색 ─────────────────────────────────────── */
 .tabs{display:flex;gap:2px;background:#fff;border-radius:var(--r1);padding:4px;
@@ -202,6 +204,8 @@ tbody tr.sum td{background:var(--th-bg);font-weight:800;border-top:1px solid var
 .tab.on{background:var(--brand);color:#fff}
 .tab em{font-style:normal;opacity:.7}
 .bar{display:flex;gap:var(--s2);margin-top:var(--s3);flex-wrap:wrap}
+    /* 유입 필터. 옆 버튼들과 키가 같아야 줄이 안 흔들린다 */
+    .ib.sel{-webkit-appearance:none;appearance:none;padding-right:26px;background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='%2341504B' d='M6 8.5 1.5 4h9z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;background-size:10px}
 .sch{flex:1;min-width:200px;height:44px;background:#fff;border-radius:var(--r1);
   box-shadow:inset 0 0 0 1px var(--line);display:flex;align-items:center;gap:var(--s2);
   padding:0 var(--s3);color:var(--faint)}
@@ -574,11 +578,11 @@ body.authed .gate{display:none}
   </div>
 </div></section><section id="v-leads" hidden>
 <div class="ph"><h1>상담함</h1><span class="upd" id="leadupd"></span></div>
-<div class="tabs"><button class="tab on" onclick="tab('all',this)">전체<em id="cnt-all">0</em></button><button class="tab" onclick="tab('new',this)">신규<em id="cnt-new">0</em></button><button class="tab" onclick="tab('call',this)">통화<em id="cnt-call">0</em></button><button class="tab" onclick="tab('quo',this)">견적<em id="cnt-quo">0</em></button><button class="tab" onclick="tab('con',this)">계약<em id="cnt-con">0</em></button><button class="tab" onclick="tab('no',this)">무응답<em id="cnt-no">0</em></button></div>
+<div class="tabs"><button class="tab on" onclick="tab('all',this)">전체<em id="cnt-all">0</em></button><button class="tab" onclick="tab('new',this)">신규<em id="cnt-new">0</em></button><button class="tab" onclick="tab('call',this)">통화<em id="cnt-call">0</em></button><button class="tab" onclick="tab('quo',this)">견적<em id="cnt-quo">0</em></button><button class="tab" onclick="tab('con',this)">계약<em id="cnt-con">0</em></button><button class="tab" onclick="tab('no',this)">무응답<em id="cnt-no">0</em></button><button class="tab" onclick="tab('bad',this)">불량<em id="cnt-bad">0</em></button></div>
 <div class="bar">
   <label class="sch"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.8l-.3-.3a6.5 6.5 0 1 0-.7.7l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg>
     <input type="search" placeholder="이름 또는 연락처" oninput="search(this.value)"></label>
-  <button class="ib" id="mbtn" onclick="monthOnly(this)"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/></svg>이번 달만</button>
+  <select class="ib sel" id="srcsel" aria-label="유입 경로로 거르기" onchange="srcFilter(this.value)"><option value="all">유입 전체</option></select><button class="ib" id="mbtn" onclick="monthOnly(this)"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/></svg>이번 달만</button>
   <button class="ib" onclick="downloadCsv()"><svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>엑셀 내려받기</button>
 </div>
 <div class="card mt">
@@ -587,7 +591,7 @@ body.authed .gate{display:none}
     <th style="width:108px"><button class="so" onclick="sortBy('at',this)">접수<svg viewBox="0 0 24 24"><path d="M12 5 8 10h8l-4-5zm0 14 4-5H8l4 5z"/></svg></button></th>
     <th style="width:80px"><button class="so" onclick="sortBy('nm',this)">이름<svg viewBox="0 0 24 24"><path d="M12 5 8 10h8l-4-5zm0 14 4-5H8l4 5z"/></svg></button></th>
     <th style="width:196px">연락처</th><th>관심 차종</th>
-    <th style="width:148px">유입</th><th style="width:128px" class="r">상태</th>
+    <th style="width:148px">유입</th><th style="width:128px" class="r"><button class="so" onclick="sortBy('st',this)">상태<svg viewBox="0 0 24 24"><path d="M12 5 8 10h8l-4-5zm0 14 4-5H8l4 5z"/></svg></button></th>
   </tr></thead><tbody id="leadbody"></tbody></table></div>
 </div>
 <p class="hint" style="padding:0 4px">행을 누르면 상세가 열립니다. 상태는 목록에서 바로 바꿔도 됩니다.</p></section><section id="v-reviews" hidden>
@@ -951,7 +955,9 @@ function boot(){
   }).catch(function(){});
 }
 
-var ST = [['new','신규'],['call','통화'],['quo','견적'],['con','계약'],['no','무응답']];
+var ST = [['new','신규'],['call','통화'],['quo','견적'],['con','계약'],['no','무응답'],['bad','불량']];
+      /* 상태 흐름 순서. 정렬에서 '신규 → 통화 → 견적 → 계약' 으로 놓을 때 쓴다 */
+      var ORD = {}; ST.forEach(function(p, i){ ORD[p[0]] = i; });
 var STN = {}; ST.forEach(function(p){ STN[p[0]] = p[1]; });
 
 /* 받침이 있으면 '으로', 없거나 ㄹ 이면 '로'. 안 붙이면 "계약 로" 처럼 나온다 */
@@ -1060,7 +1066,7 @@ document.addEventListener('input', function(e){
 });
 
 /* ───── 상담함 ───── */
-var FILTER = 'all', Q = '', SORT = null, SDIR = 1;
+var FILTER = 'all', Q = '', SORT = 'at', SDIR = 1, SRC = 'all';
 
 
 /* ───── 이번 달만 보기 · 엑셀 내려받기 ───── */
@@ -1121,16 +1127,42 @@ function leadList(){
   var pre = ('0' + (mm.getMonth() + 1)).slice(-2) + '-';
   var list = LEADS.filter(function(d){
     if(MONTH_ONLY && String(d.at).slice(0, 3) !== pre) return false;
-    if(FILTER !== 'all' && d.st !== FILTER) return false;
+    /* '전체' 에는 불량을 섞지 않는다. 일하는 중에 보이면 방해만 된다 */
+    if(FILTER === 'all'){ if(d.st === 'bad') return false; }
+    else if(d.st !== FILTER) return false;
+    if(SRC !== 'all' && (d.src || '') !== SRC) return false;
     if(!Q) return true;
     return (d.nm + d.tel + (d.car || '')).replace(/-/g,'').indexOf(Q.replace(/-/g,'')) > -1;
   });
-  if(SORT){
-    list = list.slice().sort(function(a, b){
-      return (a[SORT] > b[SORT] ? 1 : a[SORT] < b[SORT] ? -1 : 0) * SDIR;
-    });
-  }
-  return list;
+  return sortLeads(list);
+}
+
+/* 접수는 '10-17 09:42' 라 연도가 없다. 문자열로 비교하면 1월이 12월보다 앞선다.
+   기다린 분(mins) 으로 비교해야 해가 바뀌어도 안 뒤집힌다 */
+function sortLeads(list){
+  return list.slice().sort(function(a, b){
+    var va, vb;
+    if(SORT === 'at'){ va = a.mins || 0; vb = b.mins || 0; }
+    else if(SORT === 'st'){ va = ORD[a.st]; vb = ORD[b.st]; }
+    else { va = a[SORT] || ''; vb = b[SORT] || ''; }
+    return (va > vb ? 1 : va < vb ? -1 : 0) * SDIR;
+  });
+}
+
+/* 유입 경로 목록은 들어온 값으로 만든다. 박아두면 새 경로가 생겨도 안 보인다 */
+function srcFilter(v){ SRC = v; drawLeads(); }
+function fillSrc(){
+  var sel = document.getElementById('srcsel');
+  if(!sel) return;
+  var seen = {}, opts = ['<option value="all">유입 전체</option>'];
+  LEADS.forEach(function(d){
+    var v = (d.src || '').trim();
+    if(!v || seen[v]) return;
+    seen[v] = 1;
+    opts.push('<option value="' + esc(v) + '"' + (SRC === v ? ' selected' : '') + '>' + esc(v) + '</option>');
+  });
+  if(SRC !== 'all' && !seen[SRC]) SRC = 'all';
+  sel.innerHTML = opts.join('');
 }
 
 function drawLeads(){
@@ -1146,7 +1178,9 @@ function drawLeads(){
     if(e) e.textContent = LEADS.filter(function(d){ return d.st === p[0]; }).length;
   });
   var eAll = document.getElementById('cnt-all');
-  if(eAll) eAll.textContent = LEADS.length;
+  /* '전체' 는 불량을 뺀 수. 탭 숫자와 목록 건수가 달라지면 믿지 않게 된다 */
+  if(eAll) eAll.textContent = LEADS.filter(function(d){ return d.st !== 'bad'; }).length;
+  fillSrc();
   /* 왼쪽 메뉴와 종 아이콘 숫자도 같은 값이어야 한다. 박아두면 0건일 때 3이 남는다 */
   var nw = LEADS.filter(function(d){ return d.st === 'new'; }).length;
   ['nav-n', 'bell-n'].forEach(function(id){
